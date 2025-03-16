@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Compass - Career Results</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center;
+            background-image: url('background-pattern.png');
+            background-repeat: repeat;
+            background-size: contain;
+            color: black;
+        }
+        .container { 
+            width: 60%; 
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: darkblue;
+        }
+        .result {
+            font-size: 20px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #333;
+        }
+        .retake {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: orange;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .retake:hover {
+            background: darkorange;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Top 3 Career Recommendations</h2>
+        <div id="careerResults"></div>
+        <a href="index.html" class="retake">Retake Quiz</a>
+    </div>
+
+    <script>
+        const careerCategories = {
+            "Solving problems": ["Software Engineer", "Data Analyst"],
+            "Helping others": ["Doctor", "Social Worker"],
+            "Creating new things": ["Fashion Designer", "Graphic Designer"],
+            "Managing people": ["Entrepreneur", "Project Manager"],
+            "Office": ["Software Engineer", "Financial Analyst"],
+            "Studio": ["Fashion Designer", "Interior Designer"],
+            "Hospital": ["Doctor", "Pharmacist"],
+            "Business setup": ["Entrepreneur", "Marketing Manager"]
+        };
+
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            let careerScores = {};
+
+            for (let [key, value] of params.entries()) {
+                let careers = careerCategories[value];
+                if (careers) {
+                    careers.forEach(career => {
+                        careerScores[career] = (careerScores[career] || 0) + 1;
+                    });
+                }
+            }
+
+            return Object.entries(careerScores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([career]) => career);
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById("careerResults");
+            let topCareers = getQueryParams();
+
+            resultsDiv.innerHTML = topCareers.length === 0 
+                ? "<p>Please complete the quiz to get career recommendations.</p>" 
+                : topCareers.map(career => `<p class="result">${career}</p>`).join("");
+        }
+
+        displayResults();
+    </script>
+</body>
+</html>
