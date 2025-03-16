@@ -56,30 +56,18 @@
     </div>
 
     <script>
-        const careerCategories = {
-            "Solving problems": ["Software Engineer", "Data Analyst"],
-            "Helping others": ["Doctor", "Social Worker"],
-            "Creating new things": ["Fashion Designer", "Graphic Designer"],
-            "Managing people": ["Entrepreneur", "Project Manager"],
-            "Office": ["Software Engineer", "Financial Analyst"],
-            "Studio": ["Fashion Designer", "Interior Designer"],
-            "Hospital": ["Doctor", "Pharmacist"],
-            "Business setup": ["Entrepreneur", "Marketing Manager"]
-        };
-
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             let careerScores = {};
-
-            for (let [key, value] of params.entries()) {
-                let careers = careerCategories[value];
-                if (careers) {
-                    careers.forEach(career => {
-                        careerScores[career] = (careerScores[career] || 0) + 1;
-                    });
+            
+            params.forEach((value) => {
+                if (!careerScores[value]) {
+                    careerScores[value] = 1;
+                } else {
+                    careerScores[value]++;
                 }
-            }
-
+            });
+            
             return Object.entries(careerScores)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 3)
